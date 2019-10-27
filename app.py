@@ -38,11 +38,14 @@ def spell_check():
         misspelled = 'misspelled-words: '
         seperator = '|'
         thewords = 'Original Input: '
+        #pattern = ,
         with open('output-words.txt', 'w') as f:
             f.write(str(words))
             f.close()
         #stdout = subprocess.check_output(["./templates/some.sh", words, dictionary])#.decode('utf-8')
-        process = subprocess.check_output(['./a.out', 'output-words.txt', "wordlist.txt"]).decode('utf-8').rstrip()
+        process = subprocess.check_output(['./a.out', 'output-words.txt', "wordlist.txt"]).decode('utf-8').replace("\n",", ").rstrip(", ")#[:-2] 
+        #misspelledOut = process.replace("\n", ", ").strip().strip(',')
+#       misspelledOut = [x for x in pattern.split(process) if x]
         return '{} {} {} {} {} {} {}'.format(misspelled, seperator, process, seperator, thewords, seperator, words)
     return render_template('spell_check.html')
 

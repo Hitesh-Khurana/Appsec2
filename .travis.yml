@@ -1,11 +1,20 @@
 sudo: false
 language: python
-python:
-  - "2.7"
-  - "3.6"
 install:
  - pip install -r requirements.txt
  - pip install tox-travis
-script:
- - nohup python app.py &
- - tox
+jobs: 
+ include:
+  - stage: "Python 2.7 Tests"
+  name: "python 2.7"
+  python: "2.7"
+  script:
+   - nohup python app.py &
+   - tox
+  - stage: "Python 3.6 Tests:
+  name: "python 3.6"
+  python: "2.7"
+  script:
+   - nohup python app.py &
+   - tox
+

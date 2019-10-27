@@ -7,15 +7,31 @@ import subprocess
 import os
 from flask_wtf.csrf import CSRFProtect
 
+#secret_key = 'test'
+#SECRET_KEY = 'the swauaewriojerwer iorjoijreioajei'
 app = Flask(__name__, static_folder='static')
 
-app.secret_key = 'test'
+#secret_key = 'test'
+#SECRET_KEY = 'the swauaewriojerwer iorjoijreioajei'
+#app.secret_key = 'test'
+app.config['SECRET_KEY'] = 'test'
 app.config['SESSION_TYPE'] = 'filesystem'
+#app.config['USE_SIGNER'] = True
+#SESSION_USE_SIGNER = True
+#SESSION_COOKIE_SECURE=True,
+#SESSION_COOKIE_HTTPONLY=True
+#SESSION_COOKIE_SAMESITE='Lax'
+app.config['SESSION_USE_SIGNER'] = True
+#app.config['SESSION_COOKIE_SECURE']=True,
+#app.config['SESSION_COOKIE_HTTPONLY']=True
+#app.config['SESSION_COOKIE_SAMESITE']='Lax'
+
 #WTF_CSRF_ENABLED = True
 # cache = Cache(app, config={'CACHE_TYPE': 'simple'})
-sessionstore = Session(app)
+sess = Session(app)
 csrf = CSRFProtect(app)
 csrf.init_app(app)
+#sess.init_app(app)
 
 
 #@app.route('/robots.txt', methods=['POST', 'GET'])
@@ -30,6 +46,14 @@ def register():
                 if userN == request.form['username']:
                     flash('User already exists please login')
                     return render_template('register.html')
+        file.close()
+        with open('Login.txt', 'r') as file:
+            for line in file:
+                userN, passW, twoF = line.strip().split(',')
+            if userN != request.form['username'] and twoF == request.form['twoFactor']:
+                flash('2fa is in use, are you already registered? Please relogin.')
+                return render_template('register.html')
+
         file.close()
         if not request.form['twoFactor'].isdigit():
             flash('Two-factor failure')
@@ -68,6 +92,7 @@ def register():
 @app.route('/login', methods=['POST', 'GET'])
 # @cache.cached(timeout=0)
 def login():
+
     # error = None
     #isauthenticated = False
     if request.method == 'POST':
@@ -130,4 +155,4 @@ def flash_success():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host= '0.0.0.0')

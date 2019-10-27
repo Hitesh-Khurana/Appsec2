@@ -12,9 +12,34 @@ app.secret_key = 'test'
 app.config['SESSION_TYPE'] = 'filesystem'
 # cache = Cache(app, config={'CACHE_TYPE': 'simple'})
 sessionstore = Session(app)
-@app.route('/')
-def hello():
-    return "Hello World!"
+@app.route('/register', methods=['POST', 'GET'])
+def register():
+    if request.method == 'POST':
+        with open('Login.txt', 'r') as file:
+            for line in file:
+                userN, passW, twoF = line.strip().split(',')
+                if userN == request.form['username']:
+                    flash('User already exists please login')
+                    return render_template('register.html')
+        file.close()
+        with open('Login.txt', 'a') as file:
+            #userN, passW, twoF = line.strip().split(',')
+            file.write(request.form['username'])
+            file.write(',')#\n
+            file.write(request.form['password'])
+            file.write(',')
+            if request.form['twoFactor'] == '':
+                file.write('\n')
+            else:
+                file.write(request.form['twoFactor'])
+                file.write('\n')
+            file.close()
+            flash('Registered successfully, Please Login')      
+
+    return render_template('register.html')
+
+
+    #return "Hello World!"
  #file = open("Login.txt","a")
   #  file.write (username)
    # file.write (",")
@@ -35,17 +60,21 @@ def login():
             #   print("", request.form['username'],request.form['password'],request.form['twoFactor'])
                 if userN == request.form['username']:
                     if passW == request.form['password']:
+                        if twoF == '':
+                            flash('Logged in successfully')     
+                            return render_template('login.html')
                         if twoF == request.form['twoFactor']:
-                            flash('Logged in successfully, Redirecting')
+                            flash('Logged in successfully')
                             #isauthenticated = True
                             session['auth'] = True
-                            return redirect(url_for('spell_check'))
+                            return render_template('login.html')
+                            #return redirect(url_for('spell_check'))
                         elif twoF != request.form['twoFactor']:
                             flash('Two-factor failure')
                             session['auth'] = False
-                elif userN != request.form['username'] or passW != request.form['password']:
-                    flash('Incorrect')
-                    session['auth'] = False
+        if userN != request.form['username'] and passW != request.form['password']:
+            flash('Incorrect')
+            session['auth'] = False
     return render_template('login.html')
 
 

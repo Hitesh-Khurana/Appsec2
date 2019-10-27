@@ -1,17 +1,26 @@
-from flask import Flask, render_template, redirect, url_for, request, flash, session, safe_join
+from flask import Flask, render_template, redirect, url_for, request, flash, session, safe_join, send_from_directory
 import time
 #from flask_caching import Cache
 from flask_sessionstore import Session
 from subprocess import check_output
 import subprocess
 import os
+from flask_wtf.csrf import CSRFProtect
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='static')
 
 app.secret_key = 'test'
 app.config['SESSION_TYPE'] = 'filesystem'
+#WTF_CSRF_ENABLED = True
 # cache = Cache(app, config={'CACHE_TYPE': 'simple'})
 sessionstore = Session(app)
+csrf = CSRFProtect(app)
+csrf.init_app(app)
+
+
+#@app.route('/robots.txt', methods=['POST', 'GET'])
+#def static_from_root():
+ #   return send_from_directory(app.static_folder, request.path[1:])
 @app.route('/register', methods=['POST', 'GET'])
 def register():
     if request.method == 'POST':
@@ -22,6 +31,15 @@ def register():
                     flash('User already exists please login')
                     return render_template('register.html')
         file.close()
+        if not request.form['twoFactor'].isdigit():
+            flash('Two-factor failure')
+            return render_template('register.html')
+        if  not (len(request.form['twoFactor']) < 13):  
+            flash('Two-factor failure')
+            return render_template('register.html')
+        if not (len(request.form['twoFactor']) >= 10):
+            flash('Two-factor failure')
+            return render_template('register.html')
         with open('Login.txt', 'a') as file:
             #userN, passW, twoF = line.strip().split(',')
             file.write(request.form['username'])
@@ -72,7 +90,8 @@ def login():
                         elif twoF != request.form['twoFactor']:
                             flash('Two-factor failure')
                             session['auth'] = False
-        if userN != request.form['username'] and passW != request.form['password']:
+                            return render_template('login.html')
+        if not ((userN == request.form['username']) and (passW == request.form['password'])):
             flash('Incorrect')
             session['auth'] = False
     return render_template('login.html')
@@ -85,7 +104,7 @@ def spell_check():
         session['auth'] = True
     elif my_var != True: 
         return redirect(url_for('login'))
-    dictionary = "/templates/asd.txt"
+    #dictionary = "/templates/asd.txt"
     if request.method == 'POST':
         words = request.form['word']
         misspelled = 'misspelled-words: '
@@ -96,7 +115,8 @@ def spell_check():
             f.close()
 #stdout = subprocess.check_output(["./templates/some.sh", words, dictionary])#.decode('utf-8')
         process = subprocess.check_output(['./a.out', 'output-words.txt', "wordlist.txt"]).decode('utf-8').replace("\n",", ").rstrip(", ")#[:-2] 
-        return '{} {} {} {} {} {} {}'.format(misspelled, seperator, process, seperator, thewords, seperator, words)
+        #return '{} {} {} {} {} {} {}'.format(misspelled, seperator, process, seperator, thewords, seperator, words)
+        return render_template('spell_check.html',bruhthemisspelledwords=process, bruhtheinput=words)
     return render_template('spell_check.html')
 
     #misspelledOut = process.replace("\n", ", ").strip().strip(',')

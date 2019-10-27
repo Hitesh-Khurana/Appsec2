@@ -194,6 +194,19 @@ class apptest(unittest.TestCase):
 			self.assertEqual(req.status_code, 200)
 		print ("Running Test 7") #prints id success for registration
 
+	def test_Successful_Registration(self):
+		site = mechanize.Browser()
+		site.open("http://127.0.0.1:5000/register")
+		site.select_form(id="inputtext")
+		site.form['username'] = 'asdaaa'
+		site.form['password'] = 'password1'
+		site.form['twoFactor'] = '5641237890'
+		site.submit()
+		soup = BeautifulSoup(site.response().read(),"html.parser")
+		all_paragraphs = soup.find('p').getText()
+		print ("Running Test 8, all_paragraphs")#prints id success for registration
+		assert all_paragraphs == 'Registered successfully, Please Login'	
+
 		#assert all_paragraphs == 'Take a sad sogn and make it better. Remember to let her under your skyn, then you begin to make it betta.'	
 
 

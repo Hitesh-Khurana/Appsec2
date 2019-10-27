@@ -1,0 +1,17 @@
+admin,admin,1234567890
+bro,bro,1234567891
+admin1,admin,1234567892
+asd,asdasd,asd
+admin2,admin,111
+a,1,1
+username,password.,2fa
+username1,password1.,2fa1
+username12,password1.,0123456789
+username2212,password1.,2fa12
+bruh,bruh,bruh1
+jn,iojnoij,ij
+3asd,34234,asd
+testing,123,12345678901
+testinga,123,12345678901
+testinga1,123,1234567890
+test9,test9,1234567890

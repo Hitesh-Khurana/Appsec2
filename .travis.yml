@@ -7,5 +7,5 @@ install:
  - pip install -r requirements.txt
  - pip install tox-travis
 script:
- - python app.py 
+ - nohup python app.py &
  - tox

@@ -1,4 +1,4 @@
-#!/home/appsec/Documents/Assignment2/.tox/py36/bin/python
+#!/home/appsec/Documents/Appsec2/.tox/py36/bin/python
 
 import sys
 import getopt

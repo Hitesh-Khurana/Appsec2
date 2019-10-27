@@ -46,7 +46,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="/home/appsec/Documents/Assignment2/.tox/py36"
+VIRTUAL_ENV="/home/appsec/Documents/Appsec2/.tox/py36"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"

@@ -1,6 +1,6 @@
 action: py36, msg: envreport
-cwd: /home/appsec/Documents/Assignment2
-cmd: /home/appsec/Documents/Assignment2/.tox/py36/bin/python -m pip freeze
+cwd: /home/appsec/Documents/Appsec2
+cmd: /home/appsec/Documents/Appsec2/.tox/py36/bin/python -m pip freeze
 beautifulsoup4==4.8.1
 bs4==0.0.1
 certifi==2019.9.11

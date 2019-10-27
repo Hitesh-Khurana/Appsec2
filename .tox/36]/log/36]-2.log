@@ -1,0 +1,3 @@
+action: 36], msg: envreport
+cwd: /home/appsec/Documents/Assignment2
+cmd: '/home/appsec/Documents/Assignment2/.tox/36]/bin/python' -m pip freeze

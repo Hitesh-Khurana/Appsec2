@@ -1,5 +1,5 @@
-sudo: true
-requiremenlanguage: python
+sudo: false
+language: python
 python:
   - "2.7"
   - "3.6"

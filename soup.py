@@ -1,10 +1,10 @@
 # importing libraries
 from bs4 import BeautifulSoup
-import urllib.request
+#import urllib.request
 import re
 from html.parser import HTMLParser
 import mechanize
-import urllib
+#import urllib
 import unittest
 #import flaskr
 import tempfile
@@ -119,7 +119,7 @@ class apptest(unittest.TestCase):
 		print ("Running Test 2 this is all_paragraphs: ", all_paragraphs) #prints id success for registration
 		assert all_paragraphs == 'Two-factor failure'		
 
-	def test_register_with_invalid_phone(self):
+	def test_duplicate_user(self):
 		site = mechanize.Browser()
 		site.open("http://127.0.0.1:5000/register")
 		site.select_form(id="inputtext")
